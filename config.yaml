@@ -1,0 +1,11 @@
+data_collection:
+  symbols_update_interval: 1d      # 股票列表更新频率
+  minute_data_interval: 5m         # 分钟数据采集间隔
+  daily_data_interval: 1d          # 日线数据采集频率
+  advanced_data_interval: 1h       # 高级数据采集频率
+  max_retries: 3                   # 失败重试次数
+  request_timeout: 10              # 请求超时时间（秒）
+  rate_limit: 500              # 每分钟最大请求数
+  storage:
+    database: trading.db             # 数据库文件
+    backup_interval: 1d            # 数据备份频率
