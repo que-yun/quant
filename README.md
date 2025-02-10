@@ -36,10 +36,16 @@ python env_test_demo.py
 python main.py
 ```
 
-### 3. 回测可视化
+### 3. 数据初始化
+首次运行系统前，需要执行数据初始化脚本以获取历史数据：
+```bash
+python -m modules.data.data_scheduler
+```
+
+### 4. 回测可视化
 运行回测可视化程序：
 ```bash
-python modules/strategy/backtest_visualization.py
+python -m modules.strategy.backtest_visualization
 ```
 
 ## 运行结果
