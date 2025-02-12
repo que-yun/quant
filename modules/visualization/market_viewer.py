@@ -54,12 +54,11 @@ class MarketViewer(QMainWindow):
     def create_chart(self):
         """创建图表"""
         try:
-            # 检查回测引擎和数据的有效性
-            if not hasattr(self.trading_system, 'backtest_engine') or \
-               not self.trading_system.backtest_engine or \
-               not hasattr(self.trading_system.backtest_engine, 'strategy') or \
-               not hasattr(self.trading_system.backtest_engine.strategy, 'snapshot') or \
-               not self.trading_system.backtest_engine.strategy.snapshot:
+            # 检查回测数据的有效性
+            if not hasattr(self.trading_system, 'backtest_data') or \
+               not self.trading_system.backtest_data or \
+               not isinstance(self.trading_system.backtest_data, pd.DataFrame) or \
+               self.trading_system.backtest_data.empty:
                 # 创建空的DataFrame
                 df = pd.DataFrame({
                     'value': [1.0],
@@ -70,11 +69,12 @@ class MarketViewer(QMainWindow):
                 df.index.name = 'date'
             else:
                 try:
-                    # 获取策略回测数据
-                    df = pd.DataFrame(self.trading_system.backtest_engine.strategy.snapshot)
-                    if df.empty:
-                        raise ValueError("回测数据为空")
-                    df.set_index('date', inplace=True)
+                    # 获取回测数据
+                    df = self.trading_system.backtest_data.copy()
+                    if not 'value' in df.columns:
+                        raise ValueError("回测数据缺少必要的列")
+                    if not df.index.name == 'date':
+                        df.set_index('date', inplace=True)
                     df.index = pd.to_datetime(df.index)
                     df['return'] = df['value'].pct_change()
                     df['cumulative_return'] = (1 + df['return']).cumprod() - 1
@@ -129,9 +129,9 @@ class MarketViewer(QMainWindow):
     def mouse_move(self, event):
         """鼠标移动事件处理"""
         if event.inaxes:
-            if hasattr(self.trading_system, 'backtest_engine') and \
-               hasattr(self.trading_system.backtest_engine, 'strategy') and \
-               self.trading_system.backtest_engine.strategy.snapshot:
+            if hasattr(self.trading_system, 'backtest_data') and \
+               isinstance(self.trading_system.backtest_data, pd.DataFrame) and \
+               not self.trading_system.backtest_data.empty:
                 df = pd.DataFrame(self.trading_system.backtest_engine.strategy.snapshot)
                 df.set_index('date', inplace=True)
                 df.index = pd.to_datetime(df.index)

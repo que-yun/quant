@@ -1,0 +1,54 @@
+# 数据采集配置
+data_collection:
+  # 数据更新频率配置
+  intervals:
+    symbols: 1d      # 股票列表更新频率
+    minute: 5m       # 分钟数据采集间隔
+    daily: 1d        # 日线数据采集频率
+    advanced: 1h     # 高级数据采集频率
+  
+  # API请求配置
+  api:
+    max_retries: 3     # 失败重试次数
+    timeout: 10        # 请求超时时间（秒）
+    rate_limit: 500    # 每分钟最大请求数
+
+  # 数据存储配置
+  storage:
+    database: data/storage/trading.db    # 数据库文件名（相对于项目根目录）
+    backup_interval: 1d     # 数据备份频率
+
+  # 数据初始化配置
+  initialization:
+    init_daily_data: false   # 是否初始化日线数据
+    init_weekly_data: false  # 是否初始化周线数据
+    init_index_data: true   # 是否初始化指数数据
+    index_list:             # 需要初始化的指数列表
+      - "000001"  # 上证指数
+      - "000300"  # 沪深300
+      - "399001"  # 深证成指
+      - "399006"  # 创业板指
+
+# 日志配置
+logging:
+  level: INFO
+  format: "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
+  rotation: "1 week"
+  retention: "1 month"
+
+# 数据库配置
+database:
+  type: sqlite
+  path: data/storage   # 相对于项目根目录的路径
+
+# 市场数据配置
+market:
+  default_start_days: 365  # 默认历史数据回溯天数
+  trading_hours:           # 交易时间配置
+    morning:
+      start: "09:30"
+      end: "11:30"
+    afternoon:
+      start: "13:00"
+      end: "15:00"
+  holidays_update: "1d"    # 节假日数据更新频率

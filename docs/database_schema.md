@@ -13,7 +13,6 @@
 | symbol | TEXT | 股票代码 | 主键，格式：sh600000/sz000001 |
 | name | TEXT | 股票名称 | |
 | industry | TEXT | 所属行业 | |
-| market | TEXT | 市场类型 | sh（上海）/sz（深圳）|
 | total_share | REAL | 总股本 | 单位：万股 |
 | circulating_share | REAL | 流通股本 | 单位：万股 |
 | market_cap | REAL | 总市值 | 单位：万元 |
@@ -22,6 +21,16 @@
 | pb_ratio | REAL | 市净率 | |
 | ps_ratio | REAL | 市销率 | |
 | pcf_ratio | REAL | 市现率 | |
+| open | REAL | 开盘价 | 单位：元 |
+| high | REAL | 最高价 | 单位：元 |
+| low | REAL | 最低价 | 单位：元 |
+| close | REAL | 收盘价 | 单位：元 |
+| volume | REAL | 成交量 | 单位：手 |
+| amount | REAL | 成交额 | 单位：元 |
+| amplitude | REAL | 振幅 | 单位：% |
+| pct_change | REAL | 涨跌幅 | 单位：% |
+| price_change | REAL | 涨跌额 | 单位：元 |
+| turnover_rate | REAL | 换手率 | 单位：% |
 | update_time | TEXT | 数据更新时间 | 格式：YYYY-MM-DD HH:MM:SS |
 
 ### 2. daily_bars（股票日线数据表）
@@ -102,7 +111,7 @@
 | update_time | TEXT | 数据更新时间 | 格式：YYYY-MM-DD HH:MM:SS |
 
 ### 6. strategy_performance（策略表现表）
-记录策略回测或实盘交易的表现指标。
+存储策略回测和实盘的表现数据。
 
 | 字段名 | 类型 | 说明 | 备注 |
 |--------|------|------|------|
@@ -115,29 +124,57 @@
 | annual_return | REAL | 年化收益率 | 单位：% |
 | max_drawdown | REAL | 最大回撤 | 单位：% |
 | win_rate | REAL | 胜率 | 单位：% |
-| sharpe_ratio | REAL | 夏普比率 | 无单位 |
+| sharpe_ratio | REAL | 夏普比率 | |
 | update_time | TEXT | 数据更新时间 | 格式：YYYY-MM-DD HH:MM:SS |
 
-### 7. fund_flow（个股资金流向表）
-记录股票的资金流向数据。
+### 7. index_basic_info（指数基本信息表）
+存储指数的基本信息。
+
+| 字段名 | 类型 | 说明 | 备注 |
+|--------|------|------|------|
+| symbol | TEXT | 指数代码 | 主键 |
+| name | TEXT | 指数名称 | |
+| type | TEXT | 指数类型 | market（市场指数）/industry（行业指数）/concept（概念指数）|
+| update_time | TEXT | 数据更新时间 | 格式：YYYY-MM-DD HH:MM:SS |
+
+### 8. index_daily_data（指数日线数据表）
+存储指数的日线交易数据。
+
+| 字段名 | 类型 | 说明 | 备注 |
+|--------|------|------|------|
+| date | TEXT | 交易日期 | 主键，格式：YYYY-MM-DD |
+| symbol | TEXT | 指数代码 | 主键 |
+| open | REAL | 开盘点位 | |
+| high | REAL | 最高点位 | |
+| low | REAL | 最低点位 | |
+| close | REAL | 收盘点位 | |
+| volume | REAL | 成交量 | 单位：手 |
+| amount | REAL | 成交额 | 单位：元 |
+| amplitude | REAL | 振幅 | 单位：% |
+| pct_change | REAL | 涨跌幅 | 单位：% |
+| price_change | REAL | 涨跌额 | 单位：点 |
+| turnover_rate | REAL | 换手率 | 单位：% |
+| update_time | TEXT | 数据更新时间 | 格式：YYYY-MM-DD HH:MM:SS |
+
+### 9. fund_flow（资金流向表）
+存储股票的资金流向数据。
 
 | 字段名 | 类型 | 说明 | 备注 |
 |--------|------|------|------|
 | date | TEXT | 交易日期 | 主键，格式：YYYY-MM-DD |
 | symbol | TEXT | 股票代码 | 主键，格式：sh600000/sz000001 |
-| market | TEXT | 市场类型 | sh（上海）/sz（深圳）|
 | close | REAL | 收盘价 | 单位：元 |
 | pct_change | REAL | 涨跌幅 | 单位：% |
-| main_net_flow | REAL | 主力净流入金额 | 单位：元，正值表示流入，负值表示流出 |
-| main_net_flow_rate | REAL | 主力净流入占比 | 单位：%，正值表示流入，负值表示流出 |
-| super_big_net_flow | REAL | 超大单净流入金额 | 单位：元，正值表示流入，负值表示流出 |
-| super_big_net_flow_rate | REAL | 超大单净流入占比 | 单位：%，正值表示流入，负值表示流出 |
-| big_net_flow | REAL | 大单净流入金额 | 单位：元，正值表示流入，负值表示流出 |
-| big_net_flow_rate | REAL | 大单净流入占比 | 单位：%，正值表示流入，负值表示流出 |
-| medium_net_flow | REAL | 中单净流入金额 | 单位：元，正值表示流入，负值表示流出 |
-| medium_net_flow_rate | REAL | 中单净流入占比 | 单位：%，正值表示流入，负值表示流出 |
-| small_net_flow | REAL | 小单净流入金额 | 单位：元，正值表示流入，负值表示流出 |
-| small_net_flow_rate | REAL | 小单净流入占比 | 单位：%，正值表示流入，负值表示流出 |
+| main_net_flow | REAL | 主力净流入金额 | 单位：元 |
+| main_net_flow_rate | REAL | 主力净流入占比 | 单位：% |
+| super_big_net_flow | REAL | 超大单净流入金额 | 单位：元 |
+| super_big_net_flow_rate | REAL | 超大单净流入占比 | 单位：% |
+| big_net_flow | REAL | 大单净流入金额 | 单位：元 |
+| big_net_flow_rate | REAL | 大单净流入占比 | 单位：% |
+| medium_net_flow | REAL | 中单净流入金额 | 单位：元 |
+| medium_net_flow_rate | REAL | 中单净流入占比 | 单位：% |
+| small_net_flow | REAL | 小单净流入金额 | 单位：元 |
+| small_net_flow_rate | REAL | 小单净流入占比 | 单位：% |
 | update_time | TEXT | 数据更新时间 | 格式：YYYY-MM-DD HH:MM:SS |
 
 ## 注意事项
